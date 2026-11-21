@@ -64,11 +64,9 @@
       <input type="text" id="name" autocomplete="name" placeholder="홍길동">
       <label class="f" for="org">소속(기관·부서)</label>
       <input type="text" id="org" value="동의의료원">
-      <label class="f" for="phone">휴대전화 뒤 4자리 (동명이인 구분용)</label>
-      <input type="tel" id="phone" maxlength="4" inputmode="numeric" placeholder="1234">
       <div class="agree">
         <input type="checkbox" id="agree">
-        <label for="agree">[개인정보 수집·이용 동의] 수집 항목: 성명, 소속, 휴대전화 뒤 4자리, 응답 내용 / 목적: 인증 평가 및 인증서 발급·관리 / 보유 기간: 사업 종료 후 5년. 동의를 거부할 수 있으나 이 경우 응시가 불가합니다.</label>
+        <label for="agree">[개인정보 수집·이용 동의] 수집 항목: 성명, 소속, 응답 내용 / 목적: 인증 평가 및 인증서 발급·관리 / 보유 기간: 사업 종료 후 5년. 동의를 거부할 수 있으나 이 경우 응시가 불가합니다.</label>
       </div>
       <div class="msg" id="introMsg"></div>
       <button id="start">평가 시작</button>
@@ -169,9 +167,8 @@ $('qs').addEventListener('change', e => {
 });
 
 $('start').onclick = () => {
-  const name = $('name').value.trim(), org = $('org').value.trim(), phone = $('phone').value.trim();
+  const name = $('name').value.trim(), org = $('org').value.trim();
   if (!name || !org) return $('introMsg').textContent = '성명과 소속을 입력해 주세요.';
-  if (!/^\d{4}$/.test(phone)) return $('introMsg').textContent = '휴대전화 뒤 4자리를 숫자로 입력해 주세요.';
   if (!$('agree').checked) return $('introMsg').textContent = '개인정보 수집·이용에 동의해 주세요.';
   $('intro').classList.add('hide'); $('exam').classList.remove('hide'); window.scrollTo(0, 0);
 };
@@ -187,7 +184,7 @@ $('submit').onclick = async () => {
   }
   if (!ENDPOINT) return $('examMsg').textContent = '제출 주소가 아직 설정되지 않았습니다. 센터에 문의해 주세요.';
   $('submit').disabled = true; $('submit').textContent = '제출 중…'; $('examMsg').textContent = '';
-  const payload = { name: $('name').value.trim(), org: $('org').value.trim(), phone4: $('phone').value.trim(), answers: a };
+  const payload = { name: $('name').value.trim(), org: $('org').value.trim(), answers: a };
   try {
     const res = await fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(payload) });
     const r = await res.json();
